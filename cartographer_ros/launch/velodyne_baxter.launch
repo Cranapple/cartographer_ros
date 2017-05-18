@@ -1,0 +1,16 @@
+<launch>
+
+  <include file="$(find huroco_localization)/launch/razor-pub.launch"/>
+
+  <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_velodyne_link" args="0 0 0 0 0 0 base_footprint velodyne 100" /> 
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find huroco_localization)/config
+          -configuration_basename velodyne_baxter.lua"
+      output="screen">
+    <remap from="points2" to="velodyne_points" />
+  </node>
+</launch>
